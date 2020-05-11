@@ -1,7 +1,4 @@
 import PIL
-import tensorflow_datasets as tfds
-import tensorflow as tf
-import matplotlib.pyplot as plt
 from keras.preprocessing import image
 import numpy as np
 from keras.applications.inception_v3 import InceptionV3

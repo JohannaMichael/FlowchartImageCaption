@@ -33,6 +33,7 @@ def load_descriptions(caption_data):
     return mapping
 
 
+'''
 def clean_descriptions(descriptions):
     # prepare translation table for removing punctuation
     table = str.maketrans('', '', string.punctuation)
@@ -51,6 +52,8 @@ def clean_descriptions(descriptions):
             desc = [word for word in desc if word.isalpha()]
             # store as string
             desc_list[i] = ' '.join(desc)
+
+'''
 
 
 def to_vocabulary(descriptions):
@@ -72,25 +75,20 @@ def save_descriptions(descriptions, filename):
     file.close()
 
 
-filenameDescriptions = "./Flickr_Data/Flickr_Data/Flickr_TextData/Flickr8k.token.txt"
+filenameDescriptions = "./FlowchartData/Text_Data/Token.txt"
 doc = load_doc(filenameDescriptions)
-# print(doc[:300])
+print(doc[:500])
 
 print('------------ Load and Preprocess the image captions ---------------')
 # parse descriptions
 descriptions_map = load_descriptions(doc)
 print('Loaded: %d ' % len(descriptions_map))
 
-# print(descriptions_map['1000268201_693b08cb0e'])
+print(descriptions_map['20200430_105144'])
 # for id in descriptions_map:
-#  print(id)
 # print(list(descriptions_map.keys())[1:5])
-
-# clean descriptions
-clean_descriptions(descriptions_map)
-# print(descriptions_map['1000268201_693b08cb0e'])
 
 vocabulary = to_vocabulary(descriptions_map)
 print('Original Vocabulary Size: %d' % len(vocabulary))
-
+print(vocabulary)
 save_descriptions(descriptions_map, 'descriptions.txt')
