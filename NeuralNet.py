@@ -38,15 +38,20 @@ def data_generator(descriptions, photos, wordtoix, max_length, num_photos_per_ba
     while 1:
         for key, desc_list in descriptions.items():
             n += 1
+            # print('key: ' + key)
             # retrieve the photo feature
             photo = photos[key + '.jpg']
+            # print('Photo Shape:')
+            # print(photo.shape)
             for desc in desc_list:
+                # print('desc: ' + desc)
                 # encode the sequence
                 seq = [wordtoix[word] for word in desc.split(' ') if word in wordtoix]
                 # split one sequence into multiple X, y pairs
                 for i in range(1, len(seq)):
                     # split into input and output pair
                     in_seq, out_seq = seq[:i], seq[i]
+                    # print('here')
                     # pad input sequence
                     in_seq = pad_sequences([in_seq], maxlen=max_length)[0]
                     # encode output sequence
@@ -70,7 +75,7 @@ for key, val in train_descriptions.items():
 print(len(all_train_captions))
 
 # Consider only words which occur at least 10 times in the corpus
-word_count_threshold = 10
+word_count_threshold = 0
 word_counts = {}
 nsents = 0
 for sent in all_train_captions:
@@ -147,7 +152,6 @@ model = Model(inputs=[inputs1, inputs2], outputs=outputs)
 
 model.summary()
 print(model.layers[2])
-
 model.layers[2].set_weights([embedding_matrix])
 model.layers[2].trainable = False
 model.compile(loss='categorical_crossentropy', optimizer='adam')
@@ -166,6 +170,12 @@ epochs = 30
 number_pics_per_batch = 3
 steps = len(train_descriptions)  # number_pics_per_bath
 
+print(train_features)
+for key, desc_list in train_descriptions.items():
+    # retrieve the photo feature
+    photo = train_features[key + '.jpg']
+    print(photo.shape)
+
 for i in range(epochs):
     if epochs < 20:
         number_pics_per_batch = 3
@@ -178,3 +188,4 @@ for i in range(epochs):
 
 
 model.save('./model_weights/model_30.h5')
+

@@ -3,3 +3,5 @@ FlowchartData
 Glove
 descriptions.txt
 __pycache__
+pickle
+model_weights

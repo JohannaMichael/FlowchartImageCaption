@@ -4,11 +4,11 @@ from keras.preprocessing.sequence import pad_sequences
 import matplotlib.pyplot as plt
 from keras.models import load_model
 
-max_length = 34  # maximum length of image captions (see NeuralNet.py, max_length)
+max_length = 17  # maximum length of image captions (see NeuralNet.py, max_length)
 print(__name__)
 model = load_model('./model_weights/model_30.h5')
 
-images = './Flickr_Data/Flickr_Data/Images/'
+images = './FlowchartData/Images/'
 
 with open("./pickle/encoded_test_images.pkl", "rb") as encoded_pickle:
     encoding_test = load(encoded_pickle)
@@ -37,7 +37,7 @@ def greedy_search(photo):
     return final
 
 
-z = 8
+z = 1
 pic = list(encoding_test.keys())[z]
 image = encoding_test[pic].reshape((1, 2048))
 x = plt.imread(images + pic)

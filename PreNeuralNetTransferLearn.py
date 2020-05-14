@@ -88,3 +88,4 @@ pickle.dump(encoding_test, open("./pickle/encoded_test_images.pkl", "wb"))
 
 train_features = load(open("./pickle/encoded_train_images.pkl", "rb"))
 print('Photos: train=%d' % len(train_features))
+
