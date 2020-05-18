@@ -1,5 +1,3 @@
-import string
-
 
 def load_doc(filename_data_input):
     # open the file as read only
@@ -75,7 +73,7 @@ def save_descriptions(descriptions, filename):
     file.close()
 
 
-filenameDescriptions = "./FlowchartData/Text_Data/Token.txt"
+filenameDescriptions = "./FlowchartData/Text_Data/withText/Token.txt"
 doc = load_doc(filenameDescriptions)
 print(doc[:500])
 
@@ -84,7 +82,7 @@ print('------------ Load and Preprocess the image captions ---------------')
 descriptions_map = load_descriptions(doc)
 print('Loaded: %d ' % len(descriptions_map))
 
-print(descriptions_map['20200430_105144'])
+print(descriptions_map['03-30'])
 # for id in descriptions_map:
 # print(list(descriptions_map.keys())[1:5])
 
