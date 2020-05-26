@@ -108,7 +108,7 @@ max_length = max_length(train_descriptions)
 print('Description Length: %d' % max_length)
 
 # Load Glove vectors
-glove_dir = './Glove'
+glove_dir = '../Glove'
 embeddings_index = {}  # empty dictionary
 f = open(os.path.join(glove_dir, 'glove.6B.200d.txt'), encoding="utf-8")
 
