@@ -1,7 +1,7 @@
-FlowchartData
+ImageCaptionTechnique/FlowchartData
 .idea
 Glove
-descriptions.txt
+ImageCaptionTechnique/descriptions.txt
 __pycache__
 pickle
 model_weights
