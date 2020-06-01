@@ -8,8 +8,8 @@ def selective_search(img, method):
     dimensions = img.shape
     print('Dimensions: ' + str(dimensions))
     # Bild wird angepasst, damit alle Bilder das gleiche Format haben und um den Rechenaufwand zu verringern.
-    newHeight = 800
-    newWidth = int(img.shape[1] * 800 / img.shape[0])
+    newHeight = 500
+    newWidth = 500
     resizedImg = cv2.resize(img, (newWidth, newHeight))
     dimensions = resizedImg.shape
     print('Dimensions after resizing: ' + str(dimensions))
@@ -56,24 +56,30 @@ def selective_search(img, method):
         rects = np.delete(rects, j, 0)
 
     selectedObjects = []
-    scaledBoundingBoxes = []
-    hscale = img.shape[0] / resizedImg.shape[0]
-    wscale = img.shape[1] / resizedImg.shape[1]
+    boundingBoxes = []
+    # hscale = img.shape[0] / resizedImg.shape[0]
+    # wscale = img.shape[1] / resizedImg.shape[1]
 
     # Übrige Regionen werden aus dem Bild ausgeschnitten und in einen Array gespeichert
     for i, rect in enumerate(rects):
         x, y, w, h = rect
         # Regionen werden skaliert
-        scaledXmin, scaledYmin, scaledXmax, scaledYmax = int(x * wscale), int(y * hscale), int((x + w) * wscale), int(
-            (y + h) * hscale)
+        # scaledXmin, scaledYmin, scaledXmax, scaledYmax = int(x * wscale), int(y * hscale), int((x + w) * wscale), int(
+        #   (y + h) * hscale)
         # Skalierte BoundingBox wird für spätere Rechnungen in einem Array abgespeichert
-        scaledBoundingBox = [scaledXmin, scaledYmin, scaledXmax, scaledYmax]
-        scaledBoundingBoxes.append(scaledBoundingBox)
+        x_min = x
+        y_min = y
+        x_max = x + w
+        y_max = y + h
+        x_middle = int(round((x_min + x_max)/2))
+        y_middle = int(round((y_min + y_max) / 2))
+        boundingBox = [x_min, y_min, x_max, y_max, x_middle, y_middle]
+        boundingBoxes.append(boundingBox)
         # Skalierte Regionen werden aus dem Originalbild ausgeschnitten (nicht aus dem 800*X Pixel Bild)
-        rectImg = img[scaledYmin:scaledYmax, scaledXmin:scaledXmax]
+        rectImg = img[y:y+h, x:x+w]
         selectedObjects.append(rectImg)
 
-    return scaledBoundingBoxes, selectedObjects
+    return boundingBoxes, selectedObjects
 
 
 def showPic(imgName, selectedObjects):
@@ -119,9 +125,6 @@ def showPic(imgName, selectedObjects):
 
 # Gibt True an, wenn sich zwei Bounding-Boxes zu viel überschneiden (da wahrscheinlich selbes Motiv)
 def intersection(boxA, boxB):
-    # Punkte oben rechts und unten links werden errechnet
-    # boxA = [rectA[0], rectA[1], rectA[0] + rectA[2], rectA[1]+rectA[3]]
-    # boxB = [rectB[0], rectB[1], rectB[0] + rectB[2], rectB[1] + rectB[3]]
 
     # Speichert die Koordinaten der Überschneidungsfläche (die Koordinaten des Punktes links oben und des Punktes rechts unten)
     interXmin = max(boxA[0], boxB[0])
@@ -150,16 +153,16 @@ def intersection(boxA, boxB):
     return (ioboxA > 0.8 or ioboxB > 0.8) and minInter > 0.7
 
 
-def deleteIntersectedObjects(scaledBoundingBoxes, selectedObjects, imgNumber):
+def deleteIntersectedObjects(boundingBoxes, selectedObjects, imgNumber):
     i = 0
     numberOfIntersections = 0
-    arraylen = len(scaledBoundingBoxes)
+    arraylen = len(boundingBoxes)
     while i < arraylen:
         j = i + 1
         while j < arraylen:
-            if intersection(scaledBoundingBoxes[i], scaledBoundingBoxes[j]):
+            if intersection(boundingBoxes[i], boundingBoxes[j]):
                 numberOfIntersections += 1
-                scaledBoundingBoxes.pop(j)
+                boundingBoxes.pop(j)
                 selectedObjects.pop(j)
                 j -= 1
                 arraylen -= 1
@@ -167,7 +170,8 @@ def deleteIntersectedObjects(scaledBoundingBoxes, selectedObjects, imgNumber):
             j += 1
         i += 1
     print('Number of objects selected that did not intersect each other: ' + str(len(selectedObjects)))
-    saveSelectedObject(selectedObjects, imgNumber)
+    # saveSelectedObject(selectedObjects, imgNumber)
+    showPic(imgNumber, selectedObjects)
     return selectedObjects
 
 
@@ -186,23 +190,22 @@ flowchart_path_list = glob.glob(flowcharts_folder_name + '*.jpg')
 
 for path in flowchart_path_list:
     path_number = int(re.search(r'\d+', path).group())
-    if path_number > 303:
-        # print(path)
-        # print(int(re.search(r'\d+', path).group()))
-        img = cv2.imread(path, cv2.IMREAD_COLOR)
-        if img is None:
-            print('img: ' + path + ' fail!')
-            exit(0)
-        else:
-            print('img: ' + path + ' read!')
+    # print(path)
+    # print(int(re.search(r'\d+', path).group()))
+    img = cv2.imread(path, cv2.IMREAD_COLOR)
+    if img is None:
+        print('img: ' + path + ' fail!')
+        exit(0)
+    else:
+        print('img: ' + path + ' read!')
 
-        scaledBoundingBoxes, selectedObjects = selective_search(img, 'f')
-        if scaledBoundingBoxes and selectedObjects is None:
-            print('Selective Search, fail!')
-            exit(0)
-        else:
-            print('Selective Search, done!')
+    boundingBoxes, selectedObjects = selective_search(img, 'f')
+    if boundingBoxes and selectedObjects is None:
+        print('Selective Search, fail!')
+        exit(0)
+    else:
+        print('Selective Search, done!')
 
-        img_number = int(re.search(r'\d+', path).group())
-        reducedSelectedObjects = deleteIntersectedObjects(scaledBoundingBoxes, selectedObjects, img_number)
-        # finalPics = showPic(img_name, reducedSelectedObjects)
+    img_number = int(re.search(r'\d+', path).group())
+    reducedSelectedObjects = deleteIntersectedObjects(boundingBoxes, selectedObjects, img_number)
+    # finalPics = showPic(img_name, reducedSelectedObjects)
