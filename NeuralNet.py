@@ -69,6 +69,8 @@ def data_generator(descriptions, photos, wordtoix, max_length, num_photos_per_ba
 
 # Create a list of all the training captions
 all_train_captions = []
+print("Train Descriptions: ")
+print(train_descriptions)
 for key, val in train_descriptions.items():
     for cap in val:
         all_train_captions.append(cap)

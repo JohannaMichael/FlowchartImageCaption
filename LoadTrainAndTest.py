@@ -21,7 +21,7 @@ def load_set(filename_data_input):
 
 
 # load training dataset (6K)
-filename = './FlowchartData/Text_Data/withText/TrainingImages.txt'
+filename = './FlowchartData/Text_Data/TrainingImages.txt'
 train = load_set(filename)
 
 print('-------------- Load Training and Testing images -----------------')
@@ -29,14 +29,14 @@ print('Dataset: %d' % len(train))
 
 # -------------- Load Images -------------------
 # Below path contains all the images
-images = './FlowchartData/Images/withText/'
+images = './FlowchartData/Images/'
 # Create a list of all image names in the directory
 img = glob.glob(images + '*.jpg')
 
 # -------------- Load Training Image Names -----------------------
 
 # Below file conatains the names of images to be used in train data
-train_images_file = './FlowchartData/Text_Data/withText/TrainingImages.txt'
+train_images_file = './FlowchartData/Text_Data/TrainingImages.txt'
 # Read the train image names in a set
 train_images = set(open(train_images_file, 'r').read().strip().split('\n'))
 # Create a list of all the training images with their full path names
@@ -49,7 +49,7 @@ for i in img:  # img is list of full path names of all images
 random.shuffle(train_img)
 # -------------- Load Test Image Names -----------------------
 # Below file contains the names of images to be used in test data
-test_images_file = './FlowchartData/Text_Data/withText/TestingImages.txt'
+test_images_file = './FlowchartData/Text_Data/TestingImages.txt'
 # Read the validation image names in a set# Read the test image names in a set
 test_images = set(open(test_images_file, 'r').read().strip().split('\n'))
 
