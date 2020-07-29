@@ -73,7 +73,7 @@ def save_descriptions(descriptions, filename):
     file.close()
 
 
-filenameDescriptions = "./FlowchartData/Text_Data/Token.txt"
+filenameDescriptions = "./FlowchartData/Text_Data/Token2.txt"
 doc = load_doc(filenameDescriptions)
 print(doc[:500])
 

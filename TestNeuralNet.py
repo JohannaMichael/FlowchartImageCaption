@@ -3,11 +3,14 @@ import numpy as np
 from keras.preprocessing.sequence import pad_sequences
 import matplotlib.pyplot as plt
 from keras.models import load_model
+from nltk.translate.bleu_score import sentence_bleu
 
 max_length = 124  # maximum length of image captions (see NeuralNet.py, max_length)
 model = load_model('./model_weights/model_30.h5')
 
 images = './FlowchartData/Images/'
+
+final_code_sentences = []
 
 with open("./pickle/encoded_test_images.pkl", "rb") as encoded_pickle:
     encoding_test = load(encoded_pickle)
@@ -36,11 +39,55 @@ def greedy_search(photo):
     return final
 
 
-for testImg in range(3):
+def insert_new_line(text):
+    with_nl = text.split('\\n')
+    return with_nl
+
+
+def load_test_descriptions(filename):
+    file = open(filename, 'r')
+    text = file.read()
+    file.close()
+    references = []
+    pic_ids = []
+    for testingImg in range(4):
+        pic_name = list(encoding_test.keys())[testingImg]
+        pic_tokens = pic_name.split('.')
+        pic_id = pic_tokens[0]
+        pic_ids.append(pic_id)
+
+    for id in pic_ids:
+        for line in text.split('\n'):
+            tokens = line.split()
+            image_id, image_desc = tokens[0], tokens[1:]
+            if image_id == id:
+                references.append(image_desc)
+    return references
+
+
+for testImg in range(4):
     pic = list(encoding_test.keys())[testImg]
     image = encoding_test[pic].reshape((1, 2048))
     x = plt.imread(images + pic)
+    print("Image Name: " + pic)
     plt.imshow(x)
     plt.show()
-    print("Greedy: " + str(testImg) + " ", greedy_search(image))
+    final_text = greedy_search(image)
+    print("Greedy: " + str(testImg) + " ", final_text)
+    final_code_sentences.append(final_text.split())
+    print('-----------------------')
+    print('\n'.join(insert_new_line(final_text)))
+    print('-----------------------')
 
+
+references = load_test_descriptions('descriptions.txt')
+for i, candidate in enumerate(final_code_sentences):
+    print(i)
+    print(candidate)
+    print(references[i])
+    score = sentence_bleu(references[i], candidate, weights=(1, 0, 0, 0))
+    print(score)
+# reference = [['this', 'is', 'a', 'test'], ['this', 'is', 'test']]
+# candidate = ['this', 'is', 'a', 'test']
+# score = sentence_bleu(reference, candidate)
+# print(score)

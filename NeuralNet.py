@@ -11,7 +11,8 @@ from keras.utils import to_categorical
 import numpy as np
 from numpy import array
 from pickle import dump
-from keras.callbacks import LearningRateScheduler
+from keras.callbacks import LearningRateScheduler, TensorBoard
+from datetime import datetime
 
 from PreNeuralNetTransferLearn import train_descriptions, train_features
 
@@ -151,12 +152,12 @@ decoder1 = add([fe2, se3])
 decoder2 = Dense(256, activation='relu')(decoder1)
 outputs = Dense(vocab_size, activation='softmax')(decoder2)
 model = Model(inputs=[inputs1, inputs2], outputs=outputs)
-
+model._get_distribution_strategy = lambda: None
 model.summary()
 print(model.layers[2])
 model.layers[2].set_weights([embedding_matrix])
 model.layers[2].trainable = False
-model.compile(loss='categorical_crossentropy', optimizer='adam')
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 
 def scheduler(epoch):
@@ -167,8 +168,10 @@ def scheduler(epoch):
 
 
 callback = LearningRateScheduler(scheduler)
+log_dir = "logs\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-epochs = 30
+epochs = 20
 number_pics_per_batch = 3
 steps = len(train_descriptions)  # number_pics_per_bath
 
@@ -178,14 +181,15 @@ for key, desc_list in train_descriptions.items():
     photo = train_features[key + '.jpg']
     print(photo.shape)
 
-for i in range(epochs):
-    if epochs < 20:
-        number_pics_per_batch = 3
-    else:
-        number_pics_per_batch = 6
-
-    generator = data_generator(train_descriptions, train_features, wordtoix, max_length, number_pics_per_batch)
-    model.fit_generator(generator, epochs=1, steps_per_epoch=steps, verbose=1, callbacks=[callback])
+# for i in range(epochs):
+#     if epochs < 10:
+#         number_pics_per_batch = 3
+#     else:
+#         number_pics_per_batch = 6
+generator = data_generator(train_descriptions, train_features,
+                               wordtoix, max_length, number_pics_per_batch)
+model.fit_generator(generator, epochs=epochs, steps_per_epoch=steps,
+                        verbose=1, callbacks=[callback, tensorboard_callback])
     # model.save('./model_weights/model_' + str(i) + '.h5')
 
 
