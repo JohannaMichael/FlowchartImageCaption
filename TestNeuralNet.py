@@ -50,7 +50,7 @@ def load_test_descriptions(filename):
     file.close()
     references = []
     pic_ids = []
-    for testingImg in range(4):
+    for testingImg in range(20):
         pic_name = list(encoding_test.keys())[testingImg]
         pic_tokens = pic_name.split('.')
         pic_id = pic_tokens[0]
@@ -65,7 +65,7 @@ def load_test_descriptions(filename):
     return references
 
 
-for testImg in range(4):
+for testImg in range(20):
     pic = list(encoding_test.keys())[testImg]
     image = encoding_test[pic].reshape((1, 2048))
     x = plt.imread(images + pic)
@@ -81,6 +81,7 @@ for testImg in range(4):
 
 
 references = load_test_descriptions('descriptions.txt')
+print()
 for i, candidate in enumerate(final_code_sentences):
     print(i)
     print(candidate)

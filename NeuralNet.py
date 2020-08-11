@@ -108,7 +108,7 @@ print(vocab_size)
 
 # determine the maximum sequence length
 max_length = max_length(train_descriptions)
-print('Description Length: %d' % max_length)
+print('Description Length/ MAXIMUM LENGTH: %d' % max_length)
 
 # Load Glove vectors
 glove_dir = './Glove'
