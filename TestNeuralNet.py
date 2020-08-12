@@ -8,7 +8,7 @@ from nltk.translate.bleu_score import sentence_bleu
 max_length = 124  # maximum length of image captions (see NeuralNet.py, max_length)
 model = load_model('./model_weights/model_30.h5')
 
-images = './FlowchartData/Images/'
+images = './FlowchartData/Images/Structured/'
 
 final_code_sentences = []
 
@@ -50,7 +50,7 @@ def load_test_descriptions(filename):
     file.close()
     references = []
     pic_ids = []
-    for testingImg in range(20):
+    for testingImg in range(3):
         pic_name = list(encoding_test.keys())[testingImg]
         pic_tokens = pic_name.split('.')
         pic_id = pic_tokens[0]
@@ -65,7 +65,7 @@ def load_test_descriptions(filename):
     return references
 
 
-for testImg in range(20):
+for testImg in range(3):
     pic = list(encoding_test.keys())[testImg]
     image = encoding_test[pic].reshape((1, 2048))
     x = plt.imread(images + pic)
