@@ -161,7 +161,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 
 def scheduler(epoch):
-    if epoch < 20:
+    if epoch < 10:
         return 0.001
     else:
         return 0.0001
@@ -171,7 +171,7 @@ callback = LearningRateScheduler(scheduler)
 log_dir = "logs\\" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 
-epochs = 20
+epochs = 15
 number_pics_per_batch = 3
 steps = len(train_descriptions)  # number_pics_per_bath
 
@@ -193,5 +193,5 @@ model.fit_generator(generator, epochs=epochs, steps_per_epoch=steps,
     # model.save('./model_weights/model_' + str(i) + '.h5')
 
 
-model.save('./model_weights/model_30.h5')
+model.save('./model_weights/image_caption_model.h5')
 

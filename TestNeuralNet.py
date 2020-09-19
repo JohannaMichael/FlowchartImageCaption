@@ -6,9 +6,9 @@ from keras.models import load_model
 from nltk.translate.bleu_score import sentence_bleu
 
 max_length = 124  # maximum length of image captions (see NeuralNet.py, max_length)
-model = load_model('./model_weights/model_30.h5')
+model = load_model('./model_weights/image_caption_model.h5')
 
-images = './FlowchartData/Images/Structured/'
+images = './FlowchartData/Images/'
 
 final_code_sentences = []
 
@@ -50,7 +50,7 @@ def load_test_descriptions(filename):
     file.close()
     references = []
     pic_ids = []
-    for testingImg in range(3):
+    for testingImg in range(9):
         pic_name = list(encoding_test.keys())[testingImg]
         pic_tokens = pic_name.split('.')
         pic_id = pic_tokens[0]
@@ -65,7 +65,7 @@ def load_test_descriptions(filename):
     return references
 
 
-for testImg in range(3):
+for testImg in range(9):
     pic = list(encoding_test.keys())[testImg]
     image = encoding_test[pic].reshape((1, 2048))
     x = plt.imread(images + pic)
