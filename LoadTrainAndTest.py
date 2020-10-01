@@ -20,7 +20,6 @@ def load_set(filename_data_input):
     return set(dataset)
 
 
-# load training dataset (6K)
 filename = './FlowchartData/Text_Data/TrainingImages.txt'
 train = load_set(filename)
 

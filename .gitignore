@@ -7,3 +7,5 @@ model_weights
 FlowchartData
 logs
 13
+*.h5
+.ipynb_checkpoints

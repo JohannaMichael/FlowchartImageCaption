@@ -77,7 +77,7 @@ for key, val in train_descriptions.items():
         all_train_captions.append(cap)
 print(len(all_train_captions))
 
-# Consider only words which occur at least 10 times in the corpus
+# Consider only words which occur at least 0 times in the corpus
 word_count_threshold = 0
 word_counts = {}
 nsents = 0
@@ -193,5 +193,5 @@ model.fit_generator(generator, epochs=epochs, steps_per_epoch=steps,
     # model.save('./model_weights/model_' + str(i) + '.h5')
 
 
-model.save('./model_weights/image_caption_model.h5')
+model.save('./image_caption_model.h5')
 
