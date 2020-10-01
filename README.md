@@ -3,9 +3,9 @@
 
 This project aims to caption or translate flowcharts into their respective pseudocode.
 
-![Flowchart Translation on Image](./assets/flowchart_image_caption.png)
+![Flowchart Translation on Image](https://github.com/JohannaMichael/Flowchart2Code/blob/master/assets/flowchart_image_caption.PNG)
 
-![Flowchart Translation on Mask](./assets/flowchart_combi_mask_caption.png)
+![Flowchart Translation on Mask](https://github.com/JohannaMichael/Flowchart2Code/blob/master/assets/flowchart_combi_mask_caption.PNG)
 
 As a guide, I used this [article](https://towardsdatascience.com/image-captioning-with-keras-teaching-computers-to-describe-pictures-c88a46a311b8).
 
