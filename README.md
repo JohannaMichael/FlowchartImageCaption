@@ -1,5 +1,5 @@
 
-#### About Flow2Code_ImageCaptioning
+#### About Flowchart Image Captioning
 
 This project aims to caption or translate flowcharts into their respective pseudocode.
 
